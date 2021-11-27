@@ -6,7 +6,7 @@ import csv
 
 """
 TODO
-- dissimilarity score
+- complete email functionality
 """
 
 THRESHOLD = 1.5 # range of this value is (1, len(self.people) // 2]
@@ -47,7 +47,7 @@ class KrisKringle:
             temp = random.sample(self.people, k = len(self.people))
             
             score = self.calc_dissimilarity_score(temp)
-            
+
             if score > THRESHOLD:
                 shuffled = True
                 self.people = temp
@@ -91,12 +91,14 @@ class KrisKringle:
         for i in range(new_list_length):
             assigned = new_list[i].get_assigned()
             assigned_idx = self.find_person(assigned, new_list)
-    
+
+            # score is distance between a person and assigned in a directed graph
             temp_score = assigned_idx - i
             score += temp_score if assigned_idx > i else new_list_length - temp_score
 
         return score
     
+    # helper function for finding location of person in a given list
     def find_person(self, name, search_list):
         for i in range(len(search_list)):
             if search_list[i].get_name() == name:
