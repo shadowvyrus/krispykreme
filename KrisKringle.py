@@ -1,12 +1,12 @@
 from Person import *
 from login import *
 import random
-import smtplib, ssl
+import yagmail
 import csv
 
 """
 TODO
-- complete email functionality
+- test email functionality
 """
 
 THRESHOLD = 1.5 # range of this value is (1, len(self.people) // 2]
@@ -63,24 +63,25 @@ class KrisKringle:
         for person in self.people:
             print(person.get_name())
 
-    def send_email(person,person2):
-        receiver_email = "spencer_xu@y7mail.com"  # Enter receiver address, change to person1.email or something
-        message = """\
-        Subject: Hi there
+    def send_email(self,person,person2):
+        receiver = person.get_email()
+        body = f'Your Kris Kringle is: {person2.get_name()}. Please do not tell anyone!'
+        filename = "kkss.png"
 
-        This message is sent from Python."""
-
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(SMTP_SERVER, PORT, context=context) as server:
-            server.login(SENDER_EMAIL, PASSWORD)
-            server.sendmail(SENDER_EMAIL, receiver_email, message)
+        yag = yagmail.SMTP("shadowvyrusdev@gmail.com")
+        yag.send(
+            to=receiver,
+            subject="Shh It's Your Kris Kringle",
+            contents=body, 
+            attachments=filename
+        )
 
     def send_all_emails(self):
-        for i in self.people:
+        for i in range(len(self.people)):
             try:
-                self.send_email(self.people[i],self.people[i+1])
+                self.send_email(self.people[i], self.people[i+1])
             except IndexError:
-                self.send_email(self.people[i],self.people[0])
+                self.send_email(self.people[i], self.people[0])
     
     # calculate by how much a new order differs from the previous order
     def calc_dissimilarity_score(self, new_list):
@@ -96,7 +97,7 @@ class KrisKringle:
             temp_score = assigned_idx - i
             score += temp_score if assigned_idx > i else new_list_length - temp_score
 
-        return score
+        return score / new_list_length
     
     # helper function for finding location of person in a given list
     def find_person(self, name, search_list):
@@ -111,3 +112,7 @@ if __name__ == "__main__":
     kk.import_csv('krispykremeTest.csv')
     kk.print_people()
     kk.shuffle_people()
+
+    kk.send_all_emails()
+    kk.save_config('krispy_kreme_new.csv')
+    
