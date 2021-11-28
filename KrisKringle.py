@@ -68,7 +68,7 @@ class KrisKringle:
         body = f'Your Kris Kringle is: {person2.get_name()}. Please do not tell anyone!'
         filename = "kkss.png"
 
-        yag = yagmail.SMTP("shadowvyrusdev@gmail.com")
+        yag = yagmail.SMTP(SENDER_EMAIL)
         yag.send(
             to=receiver,
             subject="Shh It's Your Kris Kringle",
