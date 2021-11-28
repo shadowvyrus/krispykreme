@@ -105,14 +105,13 @@ class KrisKringle:
             if search_list[i].get_name() == name:
                 return i
 
-# debug
+# main program
 if __name__ == "__main__":
     kk = KrisKringle()
 
-    kk.import_csv('krispykremeTest.csv')
-    kk.print_people()
+    kk.import_csv('krispykremeTest.csv') # change filename
+    # kk.print_people()
     kk.shuffle_people()
 
     kk.send_all_emails()
-    kk.save_config('krispy_kreme_new.csv')
-    
+    kk.save_config('krispy_kreme_new.csv') # change filename
